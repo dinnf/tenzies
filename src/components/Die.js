@@ -1,15 +1,13 @@
 import React from 'react'
 import './Die.css'
-function allNewDice() {
-    let randomNumberArray = []
-    for (let i = 1; i<7; i++) {
-        randomNumberArray.push(Math.ceil(Math.random() *6))
-}
-console.log(randomNumberArray)}
-allNewDice()
+
 function Die(props) {
+  const styles = {
+    backgroundColor: props.isHeld ? "#59E391" : "white"
+}
   return (
-    <div className="die-face">
+    
+    <div onClick={props.holdDice}className="die-face" style={styles}>
         <h2 className="face">{props.value}</h2>
     </div>
   )
