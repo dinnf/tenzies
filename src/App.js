@@ -7,11 +7,14 @@ import Confetti from 'react-confetti'
 function App() {
   const [newRoll, setNewRoll] = useState(allNewDice())
   const [tenzies, setTenzies] = useState(false)
+  const [score, setScore] = useState(0)
+  const [topScore, setTopScore] = useState(0)
   useEffect(()=>{
     let allDiceHeld = newRoll.every((die) => {return die.isHeld})
     let firstDice = newRoll[0].value
     let allDiceSame = newRoll.every((die) => {return die.value === firstDice})
-    if (allDiceHeld && allDiceSame) {setTenzies(true)}
+    if (allDiceHeld && allDiceSame) {
+      setTenzies(true)}
   },[newRoll])
   function allNewDice() {
    let randomNumberArray = []
@@ -24,9 +27,13 @@ console.log(`newDiceObject: ${newDiceObject}`)
 return newDiceObject}
 function refreshRoll() {
   if (tenzies) {
+    if (topScore===0) {setTopScore(score)}
+    else if (score < topScore) {setTopScore(score)}
     setTenzies(false)
+    setScore(0)
     setNewRoll(allNewDice())}
   else {
+    setScore(prevScore => prevScore +=1)
   setNewRoll(oldDice => oldDice.map(die => {
     return die.isHeld ? die : {value:Math.ceil(Math.random() *6),id: nanoid(), isHeld: false}
   }))}
@@ -49,6 +56,8 @@ const dieElements = newRoll.map(element => <Die isHeld = {element.isHeld} key={e
         <div className="die-container">
           {dieElements}
         </div>
+        <div>Score: {score} </div>
+        <div>Top Score: {topScore}</div>
         <div>
           <button className="roll-dice" onClick={() => {refreshRoll()}}>{tenzies ? "Play again" : "Roll Dice"}</button>
           
